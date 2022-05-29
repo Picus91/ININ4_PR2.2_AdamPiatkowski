@@ -58,5 +58,12 @@ namespace NET_ININ4_PR2._2_z3
         {
             model.ResetujWszystko();
         }
+
+        private void DziałanieDwuargumentowe(object sender, RoutedEventArgs e)
+        {
+            model.DziałanieDwuargumentowe(
+                operacja: (string)((Button)sender).Content
+                );
+        }
     }
 }
