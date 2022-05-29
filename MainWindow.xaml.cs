@@ -65,5 +65,22 @@ namespace NET_ININ4_PR2._2_z3
                 operacja: (string)((Button)sender).Content
                 );
         }
+
+        private void RównaSię(object sender, RoutedEventArgs e)
+        {
+            model.RównaSię();
+        }
+
+        private void Procent(object sender, RoutedEventArgs e)
+        {
+            model.WynikProcentowo();
+        }
+
+        private void DziałanieJednoargumentowe(object sender, RoutedEventArgs e)
+        {
+            model.DziałanieJednoargumentowe(
+                operacja: (string)((Button)sender).Content
+                );
+        }
     }
 }

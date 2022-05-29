@@ -9,12 +9,21 @@ namespace NET_ININ4_PR2._2_z3
 {
     class ModelObliczeń : INotifyPropertyChanged
     {
+        static readonly Dictionary<string, string> nazwaFunkcji = new Dictionary<string, string>()
+        {
+            ["x²"] = "kwadrat",
+            ["√x"] = "√",
+            ["1/x"] = "odwrotność"
+        };
         private string buforIO = "0";
         private double?
             lewyOperand = null,
             prawyOperand = null
             ;
-        private string operacja = null;
+        private string
+            operacja = null,
+            operacjaJednoargumentowa = null
+            ;
         private bool flagaDziałania = false;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -28,6 +37,8 @@ namespace NET_ININ4_PR2._2_z3
         public string BuforDziałania { 
             get {
                 //do korekty
+                if (operacjaJednoargumentowa != null)
+                    return $"{nazwaFunkcji[operacjaJednoargumentowa]}({lewyOperand})";
                 return $"{lewyOperand} {operacja} {prawyOperand}";
             } 
         }
@@ -77,17 +88,35 @@ namespace NET_ININ4_PR2._2_z3
                 //albo po prostu:
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("BuforIO"));
         }
+
         internal void ResetujWszystko()
         {
             ZerujIO();
-            //do uzupełnienia
+            lewyOperand = default;
+            prawyOperand = default;
+            operacja = default;
+            flagaDziałania = default;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("BuforDziałania"));
         }
         internal void ZerujIO()
         {
             BuforIO = "0";
         }
 
+        internal void DziałanieJednoargumentowe(string operacja)
+        {
+            prawyOperand = default;
+            //operacja = default;
+            operacjaJednoargumentowa = operacja;
+            lewyOperand = double.Parse(buforIO);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("BuforDziałania"));
 
+            if (operacja == "x²")
+                lewyOperand = lewyOperand * lewyOperand;
+
+            BuforIO = lewyOperand.ToString();
+            operacjaJednoargumentowa = default;
+        }
         internal void DziałanieDwuargumentowe(string operacja)
         {
             if(lewyOperand == null)
@@ -95,18 +124,40 @@ namespace NET_ININ4_PR2._2_z3
                 lewyOperand = double.Parse(buforIO);
                 this.operacja = operacja;
                 flagaDziałania = true;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("BuforDziałania"));
             }
             else
             {
-                prawyOperand = double.Parse(buforIO);
+                if(!flagaDziałania)
+                    prawyOperand = double.Parse(buforIO);
                 WykonajZbuforowaneDziałanie();
             }
+        }
 
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("BuforDziałania"));
+        internal void WynikProcentowo()
+        {
+            if(operacja != null)
+            {
+                if(!flagaDziałania)
+                    prawyOperand = double.Parse(buforIO);
+                prawyOperand = prawyOperand / 100 * lewyOperand;
+                WykonajZbuforowaneDziałanie();
+            }
+        }
+        internal void RównaSię()
+        {
+            if (operacja != null)
+            {
+                if(!flagaDziałania)
+                    prawyOperand = double.Parse(buforIO);
+                WykonajZbuforowaneDziałanie();
+            }
         }
 
         private void WykonajZbuforowaneDziałanie()
         {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("BuforDziałania"));
+
             if (operacja == "+")
                 lewyOperand = lewyOperand + prawyOperand;
 
