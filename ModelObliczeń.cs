@@ -46,5 +46,26 @@ namespace NET_ININ4_PR2._2_z3
             else
                 BuforIO = '-' + buforIO;
         }
+
+        internal void KasujZnak()
+        {
+            buforIO = buforIO.Substring(0, buforIO.Length - 1);
+            if (buforIO == "" || buforIO == "-" || buforIO == "-0")
+                BuforIO = "0";
+            else
+                //BuforIO = buforIO;
+                //albo po prostu:
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("BuforIO"));
+        }
+
+        internal void ResetujWszystko()
+        {
+            ZerujIO();
+        }
+
+        internal void ZerujIO()
+        {
+            BuforIO = "0";
+        }
     }
 }

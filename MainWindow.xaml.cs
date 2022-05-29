@@ -43,5 +43,20 @@ namespace NET_ININ4_PR2._2_z3
         {
             model.ZmianaZnaku();
         }
+
+        private void KasujZnak(object sender, RoutedEventArgs e)
+        {
+            model.KasujZnak();
+        }
+
+        private void Zeruj(object sender, RoutedEventArgs e)
+        {
+            model.ZerujIO();
+        }
+
+        private void Resetuj(object sender, RoutedEventArgs e)
+        {
+            model.ResetujWszystko();
+        }
     }
 }
