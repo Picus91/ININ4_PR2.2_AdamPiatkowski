@@ -26,5 +26,22 @@ namespace NET_ININ4_PR2._2_z3
             DataContext = model;
             InitializeComponent();
         }
+
+        private void Cyfra(object sender, RoutedEventArgs e)
+        {
+            model.DopiszCyfrę(
+                cyfra: (string)((Button)sender).Content
+                );
+        }
+
+        private void Przecinek(object sender, RoutedEventArgs e)
+        {
+            model.WstawPrzecinek();
+        }
+
+        private void ZmianaZnaku(object sender, RoutedEventArgs e)
+        {
+            model.ZmianaZnaku();
+        }
     }
 }
