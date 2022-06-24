@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace NET_ININ4_PR2._2_z3
+namespace NET_ININ4_PR2._2_z2
 {
     /// <summary>
     /// Logika interakcji dla klasy App.xaml

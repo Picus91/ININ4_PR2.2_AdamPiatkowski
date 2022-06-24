@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NET_ININ4_PR2._2_z3
+namespace Adam_Piatkowski_zadanie2
 {
     class ModelObliczeń : INotifyPropertyChanged
     {
@@ -13,8 +13,13 @@ namespace NET_ININ4_PR2._2_z3
         {
             ["x²"] = "kwadrat",
             ["√x"] = "√",
-            ["1/x"] = "odwrotność"
-        };
+            ["1/x"] = "odwrotność",
+            ["FLOOR"] = "FLOOR",
+            ["CEIL"] = "CEIL",
+            ["n!"] = "silnia",
+            ["log"] = "log",
+            ["|x|"] = "|x|"
+       };
         private string buforIO = "0";
         private double?
             lewyOperand = null,
@@ -36,7 +41,6 @@ namespace NET_ININ4_PR2._2_z3
         }
         public string BuforDziałania { 
             get {
-                //do korekty
                 if (operacjaJednoargumentowa != null)
                     return $"{nazwaFunkcji[operacjaJednoargumentowa]}({lewyOperand})";
                 return $"{lewyOperand} {operacja} {prawyOperand}";
@@ -113,12 +117,27 @@ namespace NET_ININ4_PR2._2_z3
 
             if (operacja == "x²")
                 lewyOperand = lewyOperand * lewyOperand;
+            else if (operacja == "1/x")
+                lewyOperand = 1 / lewyOperand;
+            else if (operacja == "√x")
+                lewyOperand = Math.Sqrt(Convert.ToDouble(lewyOperand));
+            else if (operacja == "n!")
+                lewyOperand = silnia(Math.Round(Convert.ToDouble(lewyOperand)));
+            else if (operacja == "log")
+                lewyOperand = Math.Log10(Convert.ToDouble(lewyOperand));
+            else if (operacja == "FLOOR")
+                lewyOperand = Math.Floor(Convert.ToDouble(lewyOperand));
+            else if (operacja == "CEIL")
+                lewyOperand = Math.Ceiling(Convert.ToDouble(lewyOperand));
+            else if (operacja == "|x|")
+                lewyOperand = Math.Abs(Convert.ToDouble(lewyOperand));
+                
 
             BuforIO = lewyOperand.ToString();
             operacjaJednoargumentowa = default;
         }
         internal void DziałanieDwuargumentowe(string operacja)
-        {
+        { 
             if(lewyOperand == null)
             {
                 lewyOperand = double.Parse(buforIO);
@@ -126,11 +145,23 @@ namespace NET_ININ4_PR2._2_z3
                 flagaDziałania = true;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("BuforDziałania"));
             }
+            else if (this.operacja == null)
+            {
+                flagaDziałania = true;
+                this.operacja = operacja;
+                lewyOperand = double.Parse(buforIO);
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("BuforDziałania"));
+            }
             else
             {
-                if(!flagaDziałania)
+                if (!flagaDziałania)
+                {
+                    flagaDziałania = true;
                     prawyOperand = double.Parse(buforIO);
-                WykonajZbuforowaneDziałanie();
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("BuforDziałania"));
+                    WykonajZbuforowaneDziałanie();
+                    this.operacja = operacja;
+                }
             }
         }
 
@@ -160,9 +191,33 @@ namespace NET_ININ4_PR2._2_z3
 
             if (operacja == "+")
                 lewyOperand = lewyOperand + prawyOperand;
+            else if (operacja == "-")
+                lewyOperand = lewyOperand - prawyOperand;
+            else if (operacja == "×")
+                lewyOperand = lewyOperand * prawyOperand;
+            else if (operacja == "÷")
+                lewyOperand = lewyOperand / prawyOperand;
+            else if (operacja == "xʸ")
+                lewyOperand = Math.Pow(Convert.ToDouble(lewyOperand), Convert.ToDouble(prawyOperand));
+            else if (operacja == "MOD")
+                lewyOperand = lewyOperand % prawyOperand;
 
             BuforIO = lewyOperand.ToString();
             flagaDziałania = true;
+            
+        }
+
+        private double silnia(double liczba)
+        {
+            if (liczba > 1)
+            {
+                return silnia(liczba - 1) * liczba;
+            }
+            else
+            {
+                return 1;
+            }
+
         }
     }
 }

@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace NET_ININ4_PR2._2_z3
+namespace Adam_Piatkowski_zadanie2
 {
     /// <summary>
     /// Logika interakcji dla klasy MainWindow.xaml
@@ -61,8 +61,9 @@ namespace NET_ININ4_PR2._2_z3
 
         private void DziałanieDwuargumentowe(object sender, RoutedEventArgs e)
         {
+            String znakDziałania = (string)((Button)sender).Content;
             model.DziałanieDwuargumentowe(
-                operacja: (string)((Button)sender).Content
+                znakDziałania
                 );
         }
 
